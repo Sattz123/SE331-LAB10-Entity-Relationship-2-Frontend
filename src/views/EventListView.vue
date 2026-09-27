@@ -9,9 +9,10 @@ const events = ref<Event[] | null>(null)
 const keyword = ref('')
 const totalEvents = ref<number>(0)
 const router = useRouter()
+const pageSize = 1
 let latestRequest = 0
 const hasNextPage = computed(() => {
-  const totalPages = Math.ceil(totalEvents.value / 3)
+  const totalPages = Math.ceil(totalEvents.value / pageSize)
   return page.value < totalPages
 })
 const props = defineProps({
@@ -34,8 +35,8 @@ function updateKeyword(inputEvent?: globalThis.Event) {
 
   const requestId = ++latestRequest
   const queryFunction = searchText === ''
-    ? EventService.getEvents(3, page.value)
-    : EventService.getEventsByKeyword(searchText, 3, page.value)
+    ? EventService.getEvents(pageSize, page.value)
+    : EventService.getEventsByKeyword(searchText, pageSize, page.value)
 
   queryFunction
     .then((response) => {
